@@ -8,23 +8,38 @@ from eralchemy import render_er
 
 Base = declarative_base()
 
-class Person(Base):
-    __tablename__ = 'person'
-    # Here we define columns for the table person
-    # Notice that each column is also a normal Python instance attribute.
-    id = Column(Integer, primary_key=True)
-    name = Column(String(250), nullable=False)
+class User(Base):
+    __tablename__ = 'user'
+    id_user = Column(Integer, primary_key=True)
+    username = Column(String(50), nullable=False)
+    first_name = Column(String(50), nullable=False)
+    last_name = Column(String(50), nullable=False)
+    email = Column(String(50), nullable=False)
+    favorites = relationship('Favorites', backref='user', lazy = True)
 
-class Address(Base):
-    __tablename__ = 'address'
-    # Here we define columns for the table address.
-    # Notice that each column is also a normal Python instance attribute.
-    id = Column(Integer, primary_key=True)
-    street_name = Column(String(250))
-    street_number = Column(String(250))
-    post_code = Column(String(250), nullable=False)
-    person_id = Column(Integer, ForeignKey('person.id'))
-    person = relationship(Person)
+class Planet(Base):
+    __tablename__ = 'planet'
+    id_planet = Column(Integer, primary_key=True)
+    planet_name = Column(String(50), nullable=False)
+
+class Character(Base):
+    __tablename__ = 'character'
+    id_character = Column(Integer, primary_key=True)
+    character_name = Column(String(50), nullable=False)
+
+class Vehicle(Base):
+    __tablename__ = 'vehicle'
+    id_vehicle = Column(Integer, primary_key=True)
+    vehicle_name = Column(String(50), nullable=False)
+
+class Favorites(Base):
+    __tablename__ = 'favorites'
+    id_favorite = Column(Integer, primary_key=True)
+    fk_user = Column(Integer, ForeignKey('user.id_user'), nullable = False)
+    fk_character = Column(Integer, ForeignKey('character.id_character'))
+    fk_planet = Column(Integer, ForeignKey('planet.id_planet'))
+    fk_vehicle = Column(Integer, ForeignKey('vehicle.id_vehicle')) 
+    
 
     def to_dict(self):
         return {}
